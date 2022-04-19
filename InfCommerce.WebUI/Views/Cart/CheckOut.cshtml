@@ -1,0 +1,91 @@
+﻿@model CheckOutVM
+<!-- Page info -->
+	<div class="page-top-info">
+		<div class="container">
+			<h4>Sepetim/Alışverişi Tamamla</h4>
+			<div class="site-pagination">
+				<a href="/">Ana Sayfa</a> /
+				<a href="/sepetim">Sepetim</a>
+			</div>
+		</div>
+	</div>
+	<!-- Page info end -->
+
+
+	<!-- checkout section  -->
+	<section class="checkout-section spad">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 order-2 order-lg-1">
+					<form class="checkout-form">
+						<div class="cf-title">Teslimat Adres Bilgileri</div>
+						<div class="row address-inputs deliveryInputs">
+							<div class="col-md-6">
+								<input asp-for="@Model.Order.NameSurname" placeholder="Adı Soyadı" />
+							</div>
+							<div class="col-md-6">
+								<input asp-for="@Model.Order.MailAddress" type="text" placeholder="Mail Adresi">
+							</div>
+							<div class="col-md-6">
+								<input asp-for="@Model.Order.TaxNumber" placeholder="T.C. Kimlik/Vergi Numarası" />
+							</div>
+							<div class="col-md-6">
+								<input asp-for="@Model.Order.TaxOffice" type="text" placeholder="Vergi Dairesi">
+							</div>
+							<div class="col-md-6">
+								<input asp-for="@Model.Order.DeliveryAddress" type="text" placeholder="Teslimat Adresi">
+							</div>
+							<div class="col-md-6">
+								<input asp-for="@Model.Order.DeliveryZipCode" type="text" placeholder="Teslimat Posta Kodu">
+							</div>
+								<div class="col-md-6">
+								<select class="selectDeliveryCity" asp-for="@Model.Order.DeliveryCity" asp-items="@Model.Cities.Select(s=>new SelectListItem{Text=s.Name,Value=s.ID.ToString()})" onchange="getDistrict(this,'selectDeliveryDistinct')"></select>
+							</div>
+							<div class="col-md-6">
+								<select class="selectDeliveryDistinct" ></select>
+							</div>
+						</div>
+						<div class="cf-title">Fatura Adresi Bilgileri<div class="float-right"><input asp-for="@Model.Order.DeliveryBilingSimilar" id="fatura" type="checkbox" checked="checked" onchange="deliveryNotBiling(this)"><label for="fatura">Fatura Adresim Teslimat Adresi ile Aynı</label></div></div>
+						<div class="row address-inputs bilingInputs" style="display:none">
+							<div class="col-md-6">
+								<input asp-for="@Model.Order.BilingAddress" type="text" placeholder="Fatura Adresi">
+							</div>
+							<div class="col-md-6">
+								<input asp-for="@Model.Order.BilingZipCode" type="text" placeholder="Fatura Posta Kodu">
+							</div>
+								<div class="col-md-6">
+								<select class="selectBilingCity" asp-for="@Model.Order.DeliveryCity" asp-items="@Model.Cities.Select(s=>new SelectListItem{Text=s.Name,Value=s.ID.ToString()})" onchange="getDistrict(this,'selectBilingDistinct')"></select>
+							</div>
+							<div class="col-md-6">
+								<select class="selectBilingDistinct" ></select>
+							</div>
+						</div>
+						<div class="cf-title">Ödeme Türü</div>
+						<select asp-for="@Model.Order.Payment" asp-items="@Html.GetEnumSelectList<EPayment>()"></select>
+						<button class="site-btn submit-order-btn">Siparişi Tamamla</button>
+					</form>
+				</div>
+				<div class="col-lg-4 order-1 order-lg-2">
+					<div class="checkout-cart">
+						<h3>Alışveriş Sepetim</h3>
+						<ul class="product-list">
+							@foreach (Cart c in Model.Carts)
+						   {
+							   <li>
+								<div class="pl-thumb"><img src="@c.Picture" alt="@c.Name"></div>
+								<h6>@c.Name</h6>
+								<p>@c.Price.ToString("#0.00") TL</p>
+							</li>
+						   }
+						</ul>
+						<ul class="price-list">
+							<li>Total<span>@Model.Carts.Sum(s=>s.Price*s.Quantity).ToString("#0.00") TL</span></li>
+							<li>Shipping<span>free</span></li>
+							<li class="total">Total<span>$99.90</span></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- checkout section end -->
